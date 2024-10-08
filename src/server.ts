@@ -1,7 +1,6 @@
 import { AppDataSource } from './index';
 import { EntityManager } from 'typeorm';
 import { User } from './entity/User';
-
 const express = require("express");
 const bcrypt = require('bcrypt');
 
@@ -30,14 +29,16 @@ app.post('/registrate', async (req, res) => {
   if (!req.body) return res.sendStatus(400);
   const salt = await bcrypt.genSalt(10);
   const name = req.body.name;
-  const password = await bcrypt.hash(req.body.password, salt);
+  console.log(name);
+  // const password = await bcrypt.hash(req.body.password, salt);
 
   const user = new User();
   user.userName = name;
-  user.password = password;
+  // user.password = password;
 
   await userRepository.save(user);
   console.log('user are addited');
+  res.redirect('/');
 });
 
 app.listen(3000, function () {
