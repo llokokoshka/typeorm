@@ -37,8 +37,13 @@ app.post('/registrate', async (req, res) => {
 
   await userRepository.save(user);
   console.log('user are addited');
-  res.redirect('/');
+  res.redirect('/todos/:id');
 });
+
+app.get('/todos/:id', (_, res) => {
+  res.render("todos.hbs");
+});
+
 
 app.listen(3000, function () {
   console.log("Сервер ожидает подключения...");
