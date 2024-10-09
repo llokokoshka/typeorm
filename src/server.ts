@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 app.set("view engine", "hbs");
@@ -29,12 +30,10 @@ app.post('/registrate', async (req, res) => {
   if (!req.body) return res.sendStatus(400);
   const salt = await bcrypt.genSalt(10);
   const name = req.body.name;
-  console.log(name);
-  // const password = await bcrypt.hash(req.body.password, salt);
-
+  const password = await bcrypt.hash(req.body.password, salt);
   const user = new User();
   user.userName = name;
-  // user.password = password;
+  user.password = password;
 
   await userRepository.save(user);
   console.log('user are addited');
