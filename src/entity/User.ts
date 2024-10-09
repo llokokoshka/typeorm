@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { 
+    Entity, 
+    PrimaryGeneratedColumn, 
+    Column,   
+    OneToMany,
+    JoinColumn, 
+} from "typeorm"
+
+import { Todos } from "./Todos" 
 
 @Entity()
 export class User {
@@ -12,4 +20,6 @@ export class User {
     @Column()
     password: string
 
+    @OneToMany(()=> Todos, (todos)=>todos.user)
+    todos: Todos[]
 }
