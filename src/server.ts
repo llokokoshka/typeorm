@@ -43,7 +43,8 @@ app.post('/registrate', async (req:Request, res:Response) => {
   res.redirect('/todos/:id');
 });
 
-app.get('/todos/:id', (_, res:Response) => {
+app.get('/todos/:id', (req:Request, res:Response) => {
+  res.json({id:req.params.id});
   res.render("todos.hbs");
 });
 
