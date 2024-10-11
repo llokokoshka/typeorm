@@ -3,12 +3,20 @@ const {Router} = require('express')
 import { Todos } from "../entity/Todos";
 import { Request, Response } from "express";
 import userSchema from "../schemas/userSchema";
-import validate from "../middleware/validate";
+import {validate} from "../middleware/validate";
 import { AppDataSource } from "../index";
 const bcrypt = require("bcrypt");
 const router = Router();
+const dotenv = require('dotenv');
+dotenv.config();
+process.env.TOKEN_SECRET;
+
 
 const userRepository = AppDataSource.getRepository(User);
+
+function generateAccessToken(username) {
+  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+}
 
 router.get("/", (_, res: Response) => {
   res.render("index.hbs");
@@ -18,10 +26,10 @@ router.get("/registrate", (_, res: Response) => {
   res.render("registrate.hbs");
 });
 
-router.post("/registrate", async (req: Request, res: Response) => {
+router.post("/registrate", validate(userSchema), async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
-    userSchema.validate(req.body, { abortEarly: false });
+    const token = generateAccessToken({ username: req.body.name });
     const salt = await bcrypt.genSalt(10);
     const name = req.body.name;
     const password = await bcrypt.hash(req.body.password, salt);
@@ -34,7 +42,7 @@ router.post("/registrate", async (req: Request, res: Response) => {
     user.password = password;
     await userRepository.save(user);
     console.log("user are addited");
-    res.redirect(`/user/${user.id}`, user);
+    res.redirect(`/user/${user.id}`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
