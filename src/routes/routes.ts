@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { registrate, login, deleteUser, updateUser, getUser } from "../controllers/appControllers";
-const {Router} = require('express')
+const { Router } = require('express')
 const router = Router();
 
 router.get("/", (_, res: Response) => {
