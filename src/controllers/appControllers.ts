@@ -13,7 +13,7 @@ export function generateAccessToken(id) {
   return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '15s' });
 }
 
-export const registrate = async (req: Request, res: Response) => {
+export const registration = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
     await validate(userSchema);
@@ -28,7 +28,7 @@ export const registrate = async (req: Request, res: Response) => {
     await userRepository.save(user);
     const token = generateAccessToken({ id: req.body.id });
     console.log("user are addited");
-    res.json(user, token);
+    res.json({user, token});
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
@@ -76,13 +76,7 @@ export const getUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
     const user = await userRepository.findOneById(req.params.id);
-
-    res.render("userPage.hbs", {
-      fullName: user.fullName,
-      email: user.Email,
-      dob: user.Dob
-    });
-
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");

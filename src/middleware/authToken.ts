@@ -1,13 +1,17 @@
 const jwt = require('jsonwebtoken');
+import { User } from "../entity/User";
+import { AppDataSource } from "../index";
+const userRepository = AppDataSource.getRepository(User);
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, user: any) => {
+  await jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, id: any) => {
     console.log(err)
     if (err) return res.sendStatus(403)
-    req.user = user
+    const user =  userRepository.findOneById(id); 
+    if (!user) return res.status(500).send("Error while registering user");
     next()
   })
 }
