@@ -10,7 +10,7 @@ import userSchema from "../schemas/userSchema";
 const userRepository = AppDataSource.getRepository(User);
 
 export function generateAccessToken(id) {
-  return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '15s' });
+  return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '3h' });
 }
 
 export const registration = async (req: Request, res: Response) => {
