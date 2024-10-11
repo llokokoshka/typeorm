@@ -1,14 +1,7 @@
-import { User } from "../entity/User";
-const {Router} = require('express')
 import { Request, Response } from "express";
-import userSchema from "../schemas/userSchema";
-import {validate} from "../middleware/validate";
-import { AppDataSource } from "../index";
 import { registrate, login, deleteUser, updateUser, getUser } from "../controllers/appControllers";
-import authenticateToken from "../middleware/authToken";
+const {Router} = require('express')
 const router = Router();
-const dotenv = require('dotenv');
-dotenv.config();
 
 router.get("/", (_, res: Response) => {
   res.render("index.hbs");

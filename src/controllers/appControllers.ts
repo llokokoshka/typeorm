@@ -7,6 +7,8 @@ import { User } from "../entity/User";
 import { AppDataSource } from "../index";
 import {validate} from "../middleware/validate";
 import userSchema from "../schemas/userSchema";
+import authenticateToken from "../middleware/authToken";
+
 
 const userRepository = AppDataSource.getRepository(User);
 
