@@ -9,9 +9,8 @@ import { validate } from "../middleware/validate";
 import userSchema from "../schemas/userSchema";
 import authenticateToken from "../middleware/authToken";
 
-
 const userRepository = AppDataSource.getRepository(User);
-
+console.log(process.env.TOKEN_SECRET);
 export function generateAccessToken(username) {
   return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
@@ -22,6 +21,7 @@ export const registrate = async (req: Request, res: Response) => {
     await validate(userSchema);
     const token = generateAccessToken({ username: req.body.name });
     const salt = await bcrypt.genSalt(10);
+    console.log(req.body);
     const name = req.body.name;
     const password = await bcrypt.hash(req.body.password, salt);
     const email = req.body.email
