@@ -1,5 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 import { Request, Response } from "express";
 const bcrypt = require("bcrypt");
@@ -10,7 +9,7 @@ import userSchema from "../schemas/userSchema";
 import authenticateToken from "../middleware/authToken";
 
 const userRepository = AppDataSource.getRepository(User);
-console.log(process.env.TOKEN_SECRET);
+
 export function generateAccessToken(username) {
   return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
@@ -21,16 +20,13 @@ export const registrate = async (req: Request, res: Response) => {
     await validate(userSchema);
     const token = generateAccessToken({ username: req.body.name });
     const salt = await bcrypt.genSalt(10);
-    console.log(req.body);
-    const name = req.body.name;
-    const password = await bcrypt.hash(req.body.password, salt);
-    const email = req.body.email
-    const dob = req.body.dob;
+    const {name, email, password, Dob} = req.body;
+    const passwordHash = await bcrypt.hash(password, salt);
     const user = new User();
     user.fullName = name;
     user.Email = email;
-    user.Dob = dob;
-    user.password = password;
+    user.Dob = Dob;
+    user.password = passwordHash;
     await userRepository.save(user);
     console.log("user are addited");
     res.redirect(`/user/${user.id}`);
