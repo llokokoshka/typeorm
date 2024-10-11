@@ -4,4 +4,4 @@ node_modules/
 build/
 tmp/
 temp/
-.env key.env
+.env file.env
