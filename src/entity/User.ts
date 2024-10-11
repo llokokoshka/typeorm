@@ -2,10 +2,7 @@ import {
     Entity, 
     PrimaryGeneratedColumn, 
     Column,   
-    OneToMany,
 } from "typeorm"
-
-import { Todos } from "./Todos" 
 
 @Entity()
 export class User {
@@ -24,7 +21,4 @@ export class User {
 
     @Column()
     Dob: Date
-
-    @OneToMany(()=> Todos, (todos)=>todos.user)
-    todos: Todos[]
 }

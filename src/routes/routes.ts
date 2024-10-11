@@ -1,11 +1,11 @@
 import { User } from "../entity/User";
 const {Router} = require('express')
-import { Todos } from "../entity/Todos";
 import { Request, Response } from "express";
 import userSchema from "../schemas/userSchema";
 import {validate} from "../middleware/validate";
 import { AppDataSource } from "../index";
 import { generateAccessToken } from "../controllers/appControllers";
+import authenticateToken from "../middleware/auth";
 const bcrypt = require("bcrypt");
 const router = Router();
 const dotenv = require('dotenv');
@@ -44,7 +44,7 @@ router.post("/registrate", validate(userSchema), async (req: Request, res: Respo
   }
 });
 
-router.get("/user/:id", async(req: Request, res: Response) => {
+router.get("/user/:id", authenticateToken, async(req: Request, res: Response) => {
   const userRepository = AppDataSource.getRepository(User);
   const user = await userRepository.findOneById(req.params.id);
 
@@ -55,7 +55,7 @@ router.get("/user/:id", async(req: Request, res: Response) => {
   });
 });
 
-router.post("/user/:id", async (req: Request, res: Response) => {
+router.post("/user/:id", authenticateToken, async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
     res.render("userPage.hbs");
