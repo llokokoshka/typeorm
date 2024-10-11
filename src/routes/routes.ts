@@ -7,6 +7,7 @@ import {validate} from "../middleware/validate";
 import { AppDataSource } from "../index";
 const bcrypt = require("bcrypt");
 const router = Router();
+const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 process.env.TOKEN_SECRET;
