@@ -15,10 +15,16 @@ export class User {
     id: number
 
     @Column()
-    userName: string
+    fullName: string
+
+    @Column({unique:true})
+    Email: string
 
     @Column()
     password: string
+
+    @Column()
+    Dob: Date
 
     @OneToMany(()=> Todos, (todos)=>todos.user)
     todos: Todos[]

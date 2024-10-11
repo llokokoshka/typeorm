@@ -38,7 +38,7 @@ app.post("/registrate", async (req: Request, res: Response) => {
     const name = req.body.name;
     const password = await bcrypt.hash(req.body.password, salt);
     const user = new User();
-    user.userName = name;
+    user.fullName = name;
     user.password = password;
 
     await userRepository.save(user);
