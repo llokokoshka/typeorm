@@ -5,19 +5,13 @@ import { Request, Response } from "express";
 import userSchema from "../schemas/userSchema";
 import {validate} from "../middleware/validate";
 import { AppDataSource } from "../index";
+import { generateAccessToken } from "../controllers/appControllers";
 const bcrypt = require("bcrypt");
 const router = Router();
-const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
-process.env.TOKEN_SECRET;
-
 
 const userRepository = AppDataSource.getRepository(User);
-
-function generateAccessToken(username) {
-  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
-}
 
 router.get("/", (_, res: Response) => {
   res.render("index.hbs");
