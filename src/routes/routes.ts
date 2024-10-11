@@ -1,20 +1,12 @@
-import { Request, Response } from "express";
 import { registrate, login, deleteUser, updateUser, getUser } from "../controllers/appControllers";
 const { Router } = require('express')
 const router = Router();
-
-router.get("/", (_, res: Response) => {
-  res.render("index.hbs");
-});
-
-router.get("/registrate", (_, res: Response) => {
-  res.render("registrate.hbs");
-});
+import authenticateToken from "../middleware/authToken";
 
 router.post("/registrate", registrate);
-
-router.get("/user/:id", getUser);
-
-router.post("/user/:id");
+router.post("/login", login);
+router.get("/user/:id", authenticateToken, getUser);
+router.put("/user/:id", authenticateToken, updateUser);
+router.delete("/user/:id", authenticateToken, deleteUser);
 
 module.exports = router;

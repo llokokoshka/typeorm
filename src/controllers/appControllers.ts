@@ -6,21 +6,19 @@ import { User } from "../entity/User";
 import { AppDataSource } from "../index";
 import { validate } from "../middleware/validate";
 import userSchema from "../schemas/userSchema";
-import authenticateToken from "../middleware/authToken";
 
 const userRepository = AppDataSource.getRepository(User);
 
-export function generateAccessToken(username) {
-  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+export function generateAccessToken(id) {
+  return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '15s' });
 }
 
 export const registrate = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
     await validate(userSchema);
-    const token = generateAccessToken({ username: req.body.name });
     const salt = await bcrypt.genSalt(10);
-    const {name, email, password, Dob} = req.body;
+    const { name, email, password, Dob } = req.body;
     const passwordHash = await bcrypt.hash(password, salt);
     const user = new User();
     user.fullName = name;
@@ -28,8 +26,9 @@ export const registrate = async (req: Request, res: Response) => {
     user.Dob = Dob;
     user.password = passwordHash;
     await userRepository.save(user);
+    const token = generateAccessToken({ id: req.body.id });
     console.log("user are addited");
-    res.redirect(`/user/${user.id}`);
+    res.json(user, token);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
@@ -37,10 +36,19 @@ export const registrate = async (req: Request, res: Response) => {
 }
 export const login = async (req: Request, res: Response) => {
   try {
+    const { email, password } = req.body;
+    const user = await userRepository.findOneBy({ Email: email });
+    if (!user) return;
+    bcrypt.compare(password, user.password, function (err, result) {
+      if (result) {
+        const token = generateAccessToken({ id: req.body.id });
+        res.json(user, token);
+      }
+    });
 
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error while registering user");
+    res.status(500).send("Error while loggin user");
   }
 }
 
@@ -67,7 +75,6 @@ export const updateUser = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
-    const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOneById(req.params.id);
 
     res.render("userPage.hbs", {
