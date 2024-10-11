@@ -1,11 +1,13 @@
 import { AppDataSource } from "./index";
-import { EntityManager } from "typeorm";
+// import { EntityManager } from "typeorm";
 import { User } from "./entity/User";
 import { Todos } from "./entity/Todos";
 import { Request, Response } from "express";
-import { reduceEachTrailingCommentRange } from "typescript";
+import userSchema from "./schemas/userSchema";
+import validate from "./middleware/validate";
 const express = require("express");
 const bcrypt = require("bcrypt");
+
 
 const app = express();
 
@@ -34,35 +36,30 @@ app.get("/registrate", (_, res: Response) => {
 app.post("/registrate", async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
+   let a = userSchema.validate(req.body, {abortEarly: false });
     const salt = await bcrypt.genSalt(10);
     const name = req.body.name;
     const password = await bcrypt.hash(req.body.password, salt);
     const user = new User();
     user.fullName = name;
     user.password = password;
-
     await userRepository.save(user);
     console.log("user are addited");
-    res.redirect(`/todos/${user.id}`);
+    res.redirect(`/user/${user.id}`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
   }
 });
 
-app.get("/todos/:id", (req: Request, res: Response) => {
-  res.render("todos.hbs", { id: req.params.id });
+app.get("/user/:id", (req: Request, res: Response) => {
+  res.render("userPage.hbs", { id: req.params.id });
 });
 
-app.post("/todos/:id", async (req: Request, res: Response) => {
+app.post("/user/:id", async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
-    const value = req.body.value;
-    const todo = new Todos();
-    todo.value = value;
-    await userRepository.save(todo);
-    console.log("todo are addited");
-    res.render("todos.hbs");
+    res.render("userPage.hbs");
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while adding todo");

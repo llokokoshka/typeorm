@@ -3,7 +3,6 @@ import {
     PrimaryGeneratedColumn, 
     Column,   
     OneToMany,
-    JoinColumn, 
 } from "typeorm"
 
 import { Todos } from "./Todos" 
