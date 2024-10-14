@@ -49,14 +49,13 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const user = await userRepository.findOneBy({ email: email });
-    if (!user) return;
+    if (!user) return res.status(500).send("Error while loggin user");
     const salt = user.password.split('//')[0];
     const userHashPassword = user.password.split('//')[1];
-    const checkPass = validPassword(password, salt, userHashPassword);
-    if (checkPass) {
-      const token = generateAccessToken({ id: req.body.id });
-      res.json({ user, token });
-    }
+    const checkPass = validPassword(password,  userHashPassword, salt);
+    if (checkPass == false) return res.status(500).send("Wrong password");
+    const token = generateAccessToken({ id: req.body.id });
+    res.json({ user, token });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while loggin user");
