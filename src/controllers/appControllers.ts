@@ -42,10 +42,9 @@ export const login = async (req: Request, res: Response) => {
     bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
         const token = generateAccessToken({ id: req.body.id });
-        res.json(user, token);
+        res.json({user, token});
       }
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while loggin user");
@@ -55,7 +54,9 @@ export const login = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
-
+    const user = await userRepository.findOneById(req.params.id);
+    if (!user) return res.status(500).send("User not found");
+    return await userRepository.remove(user);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
@@ -65,7 +66,19 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
-
+    const user = await userRepository.findOneById(req.params.id);
+    if (!user) return res.status(500).send("User not found");
+    await validate(userSchema);
+    const salt = await bcrypt.genSalt(10);
+    const { name, email, password, Dob } = req.body;
+    const passwordHash = await bcrypt.hash(password, salt);
+    user.fullName = name;
+    user.Email = email;
+    user.Dob = Dob;
+    user.password = passwordHash;
+    await userRepository.save(user);
+    console.log("user are changed");
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
@@ -76,7 +89,13 @@ export const getUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
     const user = await userRepository.findOneById(req.params.id);
-    res.json(user);
+    if (!user) return res.status(500).send("User not found");
+    const visibleParamsOfUser = {
+      name: user.fullName,
+      email: user.Email,
+      dateOfBirth: user.Dob
+    }
+    res.json(visibleParamsOfUser);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
