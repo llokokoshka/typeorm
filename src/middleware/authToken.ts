@@ -9,10 +9,9 @@ async function authenticateToken(req: Request, res: Response, next: NextFunction
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401);
   await jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, id: any) => {
-    console.log(err)
     if (err) return res.sendStatus(403)
-    const user = userRepository.findOneById(id);
-    if (!user) return res.status(500).send("Error while registering user");
+    const user = userRepository.findOneBy({id:id});
+    if (!user) return res.status(404).send("User not found");
     next()
   })
 }

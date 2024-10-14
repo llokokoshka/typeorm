@@ -8,7 +8,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 require('dotenv').config();
 
-export function generateAccessToken(id:object) {
+export function generateAccessToken(id:Object) {
   return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '1h' });
 }
 
@@ -26,8 +26,8 @@ export function validPassword(password: string, hash: string, salt: string) {
   return hash === checkHash
 }
 
-export async function findUserById(id:string) {
-  return await userRepository.findOneById(id);
+export async function findUser(searchParameter:Object) {
+  return await userRepository.findOneBy(searchParameter);
 }
 
 export function handleError(res: Response, err:any, message:string) {
@@ -35,7 +35,7 @@ export function handleError(res: Response, err:any, message:string) {
   res.status(500).send(message);
 }
 
-export function addUserInDb(userFromDb, newUserInfo){
+export function addUserInDb(userFromDb:User, newUserInfo:User){
 
   const { fullName, email, password, Dob } = newUserInfo;
   const hashPass = generatePassword(password);
