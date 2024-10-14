@@ -4,8 +4,6 @@ import { Request, Response } from "express";
 const bcrypt = require("bcrypt");
 import { User } from "../entity/User";
 import { AppDataSource } from "../index";
-import { validate } from "../middleware/validate";
-import userSchema from "../schemas/userSchema";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -16,19 +14,19 @@ export function generateAccessToken(id) {
 export const registration = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(400);
   try {
-    await validate(userSchema);
+    
     const salt = await bcrypt.genSalt(10);
-    const { name, email, password, Dob } = req.body;
+    const { fullName, email, password, Dob } = req.body;
     const passwordHash = await bcrypt.hash(password, salt);
     const user = new User();
-    user.fullName = name;
-    user.Email = email;
+    user.fullName = fullName;
+    user.email = email;
     user.Dob = Dob;
     user.password = passwordHash;
     await userRepository.save(user);
     const token = generateAccessToken({ id: req.body.id });
     console.log("user are addited");
-    res.json({user, token});
+    res.json({ user, token });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error while registering user");
@@ -37,12 +35,12 @@ export const registration = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const user = await userRepository.findOneBy({ Email: email });
+    const user = await userRepository.findOneBy({ email: email });
     if (!user) return;
     bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
         const token = generateAccessToken({ id: req.body.id });
-        res.json({user, token});
+        res.json({ user, token });
       }
     });
   } catch (err) {
@@ -68,12 +66,11 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const user = await userRepository.findOneById(req.params.id);
     if (!user) return res.status(500).send("User not found");
-    await validate(userSchema);
     const salt = await bcrypt.genSalt(10);
     const { name, email, password, Dob } = req.body;
     const passwordHash = await bcrypt.hash(password, salt);
     user.fullName = name;
-    user.Email = email;
+    user.email = email;
     user.Dob = Dob;
     user.password = passwordHash;
     await userRepository.save(user);
@@ -92,7 +89,7 @@ export const getUser = async (req: Request, res: Response) => {
     if (!user) return res.status(500).send("User not found");
     const visibleParamsOfUser = {
       name: user.fullName,
-      email: user.Email,
+      email: user.email,
       dateOfBirth: user.Dob
     }
     res.json(visibleParamsOfUser);
