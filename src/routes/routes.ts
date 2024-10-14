@@ -1,4 +1,4 @@
-import { registration, login, deleteUser, updateUser, getUser } from "../controllers/appControllers";
+import { registration, login, deleteUser, updateUser, getUser } from "../controllers/crudControllers";
 const { Router } = require('express')
 const router = Router();
 import authenticateToken from "../middleware/authToken";
