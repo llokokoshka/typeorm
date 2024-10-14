@@ -2,7 +2,7 @@ import { Response } from "express";
 import { User } from "../entity/User";
 import { AppDataSource } from "../index";
 
-const crypto = require("crypto")
+const crypto = require("crypto");
 const jwt = require('jsonwebtoken');
 const userRepository = AppDataSource.getRepository(User);
 
@@ -13,17 +13,17 @@ export function generateAccessToken(id:Object) {
 }
 
 export function generatePassword(password: string) {
-  const salt = crypto.randomBytes(32).toString('hex')
-  const genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex')
+  const salt = crypto.randomBytes(32).toString('hex');
+  const genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
   return {
     salt: salt,
     hash: genHash
-  }
+  };
 }
 
 export function validPassword(password: string, hash: string, salt: string) {
-  const checkHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex')
-  return hash === checkHash
+  const checkHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+  return hash === checkHash;
 }
 
 export async function findUser(searchParameter:Object) {
