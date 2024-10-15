@@ -1,4 +1,4 @@
-import jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from "express";
 import { User } from "../db/entity/User";
 import { AppDataSource } from "../db/dataSource";

@@ -1,4 +1,4 @@
-import yup = require("yup");
+import * as yup from "yup";
 
 const updateUserSchema = yup.object({
   body: yup.object({

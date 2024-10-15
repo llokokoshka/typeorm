@@ -1,6 +1,6 @@
 import { AppDataSource } from "./db/dataSource";
 import allRoutes from './routes/routes';
-import express = require("express");
+import * as express from "express";
 
 const app = express();
 

@@ -1,8 +1,8 @@
 import { Response } from "express";
 import { User } from "../db/entity/User";
 import { AppDataSource } from "../db/dataSource";
-import crypto = require("crypto");
-import jwt = require("jsonwebtoken");
+import * as crypto from "crypto";
+import * as jwt from 'jsonwebtoken';
 import  * as dotenv from "dotenv"
 dotenv.config();
 
