@@ -1,5 +1,5 @@
 import { deleteUser, updateUser, getUser, getAllUsers } from "../controllers/crudControllers";
-const { Router } = require('express')
+import { Router } from 'express';
 const router = Router();
 import authenticateToken from "../middleware/authToken";
 import { validate } from "../middleware/validate";

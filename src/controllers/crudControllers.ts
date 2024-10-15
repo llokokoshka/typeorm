@@ -3,17 +3,20 @@ import { User } from "../db/entity/User";
 import { AppDataSource } from "../db/dataSource";
 import { generateAccessToken, handleError, validPassword, findUser, addUserInDb } from "./appControllers";
 const userRepository = AppDataSource.getRepository(User);
-require('dotenv').config();
+import  * as dotenv from "dotenv"
+dotenv.config();
 
-export const registration = async (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(404);
-
+export const registration = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.sendStatus(400); 
+    return;
+  }
   try {
     const user = new User();
     addUserInDb(user, req.body);
     await userRepository.save(user);
 
-    const token = generateAccessToken({ id: req.body.id });
+    const token = generateAccessToken({ id: user.id });
     console.log("user are addited");
     res.json({ user, token });
   }
@@ -22,46 +25,78 @@ export const registration = async (req: Request, res: Response) => {
   }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    const user = await findUser({ email: email });
-    if (!user) return res.status(404).send("User not found");
+    if (!email || !password) {
+      res.status(400).send("Email and password are required");
+      return;
+    }
+
+    const user = await userRepository.findOneBy({ email: email });
+    if (!user){
+      res.status(404).send("User not found");
+      return;
+    }
 
     const [salt, userHashPassword] = user.password.split('//');
     const isPasswordValid = validPassword(password, userHashPassword, salt);
 
-    if (isPasswordValid == false) return res.status(400).send("Wrong password");
+    if (isPasswordValid == false) {
+      res.status(400).send("Wrong password");
+      return;
+    }
 
-    const token = generateAccessToken({ id: req.body.id });
+    const token = generateAccessToken({ id: user.id });
     res.json({ user, token });
-
   }
   catch (err) {
     handleError(res, err, "Error while login user");
   }
 }
 
-export const deleteUser = async (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(404);
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.sendStatus(400); 
+    return;
+  }
 
   try {
-    const user = await findUser({ id: req.params.id });
-    if (!user) return res.status(404).send("User not found");
-
-    return await userRepository.remove(user);
+    const userId = Number(req.params.id);
+    if (isNaN(userId)) {
+      res.status(400).send("Invalid user ID");
+      return;
+    }
+    const user = await findUser(userId);
+    if (!user){
+      res.status(404).send("User not found");
+      return;
+    }
+  await userRepository.remove(user);
+  res.status(204).send(); 
   }
   catch (err) {
     handleError(res, err, "Error while delete user");
   }
 }
 
-export const updateUser = async (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(404);
+export const updateUser = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.sendStatus(400); 
+    return;
+  }
   try {
-    const user = await findUser({ id: req.params.id });
-    if (!user) return res.status(404).send("User not found");
+    const userId = Number(req.params.id);
+    if (isNaN(userId)) {
+      res.status(400).send("Invalid user ID");
+      return;
+    }
+    const user = await findUser(userId);
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
 
     addUserInDb(user, req.body);
     await userRepository.save(user);
@@ -74,18 +109,31 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 }
 
-export const getUser = async (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(404);
+export const getUser = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.sendStatus(400); 
+    return;
+  }
 
   try {
-    const user = await findUser({ id: req.params.id });
-    if (!user) return res.status(404).send("User not found");
+    const userId = Number(req.params.id);
+    if (isNaN(userId)) {
+      res.status(400).send("Invalid user ID");
+      return;
+    }
+
+    const user = await findUser(userId);
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
 
     const visibleParamsOfUser = {
       name: user.fullName,
       email: user.email,
       dateOfBirth: user.Dob
     }
+    console.log(visibleParamsOfUser);
     res.json(visibleParamsOfUser);
 
   }
@@ -94,13 +142,17 @@ export const getUser = async (req: Request, res: Response) => {
   }
 }
 
-export const getAllUsers = async (req: Request, res: Response) => {
-  if (!req.body) return res.sendStatus(404);
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+  if (!req.body) {
+    res.sendStatus(400); 
+    return;
+  }
 
   try {
     const users = await userRepository.find();
     if (!users || users.length === 0) {
-      return res.status(404).send("Users not found");
+      res.status(404).send("Users not found");
+      return;
     }
 
     const visibleParamsOfUsers = users.map(user => (
@@ -115,6 +167,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
   catch (err) {
     handleError(res, err, "Error while get user");
   }
-}
+};
 
 

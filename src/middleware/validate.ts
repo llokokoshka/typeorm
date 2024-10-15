@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 
-export const validate = (schema) => async (req: Request, res: Response, next: NextFunction) => {
+export const validate = (schema) => async (req: Request, res: Response, next: NextFunction):Promise<void> => {
   try {
     await schema.validate({
       body: req.body,
       // query: req.query,
       // params: req.params,
     }, { abortEarly: false });
-    return next();
+    next();
   } catch (err) {
-    return res.status(500).json({ type: err.name, message: err.message });
+    res.status(500).json({ type: err.name, message: err.message });
   }
 };
 

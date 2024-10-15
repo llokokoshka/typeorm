@@ -1,12 +1,13 @@
 import { Response } from "express";
 import { User } from "../db/entity/User";
 import { AppDataSource } from "../db/dataSource";
+import crypto = require("crypto");
+import jwt = require("jsonwebtoken");
+import  * as dotenv from "dotenv"
+dotenv.config();
 
-const crypto = require("crypto");
-const jwt = require('jsonwebtoken');
 const userRepository = AppDataSource.getRepository(User);
 
-require('dotenv').config();
 
 export function generateAccessToken(id:Object) {
   return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '1h' });
@@ -26,8 +27,9 @@ export function validPassword(password: string, hash: string, salt: string) {
   return hash === checkHash;
 }
 
-export async function findUser(searchParameter:Object) {
-  return await userRepository.findOneBy(searchParameter);
+export async function findUser(id:number) {
+  console.log(id);
+  return await userRepository.findOneBy({ id: id });
 }
 
 export function handleError(res: Response, err:any, message:string) {
