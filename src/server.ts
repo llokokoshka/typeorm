@@ -1,4 +1,4 @@
-import { AppDataSource } from "./dataSourse";
+import { AppDataSource } from "./db/dataSource";
 import allRoutes = require('./routes/routes');
 import express = require("express");
 

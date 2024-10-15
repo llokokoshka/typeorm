@@ -5,7 +5,7 @@ import userSchema from "../schemas/fullUserSchema";
 
 const router = Router();
 
-router.post("/registration", validate(userSchema), registration);
-router.post("/login", login);
+router.post("/sign-up", validate(userSchema), registration);
+router.post("/sign-in", login);
 
 module.exports = router;

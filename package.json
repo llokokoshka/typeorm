@@ -25,9 +25,9 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:cli": "ts-node node_modules/typeorm/cli.js",
     "migration:generate": "npm run typeorm:cli -- migration:generate -d src/db/migrations -n",
-    "db:sync": "npm run typeorm:cli -- migration:generate -p src/db/migrations/sync --dataSource src/db/dataSource.ts",
-    "db:migrate:up": "npm run typeorm:cli -- migration:run --dataSource src/db/dataSource.ts",
-    "db:migrate:down": "npm run typeorm:cli -- migration:revert --dataSource src/db/dataSource.ts"
+    "db:sync": "npm run typeorm:cli -- migration:generate -p src/db/migrations/sync --dataSource  src/db/dataSource.ts",
+    "db:migrate:up": "npm run typeorm:cli -- migration:run --dataSource  src/db/dataSource.ts",
+    "db:migrate:down": "npm run typeorm:cli -- migration:revert --dataSource  src/db/dataSource.ts"
   },
   "main": "index.js",
   "author": "",
