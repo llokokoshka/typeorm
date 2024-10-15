@@ -1,7 +1,7 @@
 import { registration, login } from "../controllers/crudControllers";
 import { Router } from 'express';
 import { validate } from "../middleware/validate";
-import userSchema from "../schemas/userSchema";
+import userSchema from "../schemas/fullUserSchema";
 
 const router = Router();
 

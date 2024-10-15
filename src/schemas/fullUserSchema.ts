@@ -1,4 +1,4 @@
-const yup = require("yup");
+import yup = require("yup");
 
 const userSchema = yup.object({
   body: yup.object({
@@ -12,9 +12,6 @@ const userSchema = yup.object({
       .required('Введите дату рождения!')
       .typeError("Неверный формат даты!")
   }),
-  // params: yup.object({
-  //   id: yup.number().required(),
-  // }),
 });
 
 export default userSchema;
