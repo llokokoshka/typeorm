@@ -5,9 +5,10 @@ import authenticateToken from "../middleware/authToken";
 import { validate } from "../middleware/validate";
 import updateUserSchema from "../schemas/updateUserSchema";
 
-userRoutes.get("/users", authenticateToken, getAllUsers);
-userRoutes.get("/:id", authenticateToken, getUser);
-userRoutes.patch("/:id", validate(updateUserSchema), authenticateToken, updateUser);
-userRoutes.delete("/:id", authenticateToken, deleteUser);
+
+userRoutes.get("/uid/:id", authenticateToken, getUser);
+userRoutes.patch("/uid/:id", validate(updateUserSchema), authenticateToken, updateUser);
+userRoutes.delete("/uid/:id", authenticateToken, deleteUser);
+userRoutes.get("/allUsers", authenticateToken, getAllUsers);
 
 export default userRoutes ;

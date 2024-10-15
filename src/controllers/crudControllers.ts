@@ -64,6 +64,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
 
   try {
     const userId = Number(req.params.id);
+    console.log(userId);
     if (isNaN(userId)) {
       res.status(400).send("Invalid user ID");
       return;
@@ -116,7 +117,9 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
+    console.log(req.params.id);
     const userId = Number(req.params.id);
+    
     if (isNaN(userId)) {
       res.status(400).send("Invalid user ID");
       return;
