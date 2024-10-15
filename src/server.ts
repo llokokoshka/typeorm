@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(allRoutes)
+app.use(allRoutes);
 
 AppDataSource.initialize()
   .then(async () => {
