@@ -1,13 +1,13 @@
 import { deleteUser, updateUser, getUser, getAllUsers } from "../controllers/crudControllers";
 import { Router } from 'express';
-const router = Router();
+const userRoutes = Router();
 import authenticateToken from "../middleware/authToken";
 import { validate } from "../middleware/validate";
 import updateUserSchema from "../schemas/updateUserSchema";
 
-router.get("/users", authenticateToken, getAllUsers);
-router.get("/:id", authenticateToken, getUser);
-router.patch("/:id", validate(updateUserSchema), authenticateToken, updateUser);
-router.delete("/:id", authenticateToken, deleteUser);
+userRoutes.get("/users", authenticateToken, getAllUsers);
+userRoutes.get("/:id", authenticateToken, getUser);
+userRoutes.patch("/:id", validate(updateUserSchema), authenticateToken, updateUser);
+userRoutes.delete("/:id", authenticateToken, deleteUser);
 
-module.exports = router;
+export default userRoutes ;

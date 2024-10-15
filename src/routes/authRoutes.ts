@@ -3,9 +3,9 @@ import { Router } from 'express';
 import { validate } from "../middleware/validate";
 import userSchema from "../schemas/fullUserSchema";
 
-const router = Router();
+const authRoutes = Router();
 
-router.post("/sign-up", validate(userSchema), registration);
-router.post("/sign-in", login);
+authRoutes.post("/sign-up", validate(userSchema), registration);
+authRoutes.post("/sign-in", login);
 
-module.exports = router;
+export default authRoutes;
