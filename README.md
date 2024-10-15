@@ -24,7 +24,7 @@ DATABASE_NAME=my_database
 TOKEN_SECRET=your_secret_key
 
 4. Launching migrations:
-`npm run typeorm migration:run`
+`npm run db:migrate:up`
 
 5. Run `npm run start` command
 
