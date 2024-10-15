@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../entity/User";
+import { User } from "../db/entity/User";
 import { AppDataSource } from "../dataSourse";
 import { generateAccessToken, handleError, validPassword, findUser, addUserInDb } from "./appControllers";
 const userRepository = AppDataSource.getRepository(User);
@@ -47,7 +47,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(404);
 
   try {
-    const user = await findUser({id: req.params.id});
+    const user = await findUser({ id: req.params.id });
     if (!user) return res.status(404).send("User not found");
 
     return await userRepository.remove(user);
@@ -60,7 +60,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(404);
   try {
-    const user = await findUser({id: req.params.id});
+    const user = await findUser({ id: req.params.id });
     if (!user) return res.status(404).send("User not found");
 
     addUserInDb(user, req.body);
@@ -78,7 +78,7 @@ export const getUser = async (req: Request, res: Response) => {
   if (!req.body) return res.sendStatus(404);
 
   try {
-    const user = await findUser({id: req.params.id});
+    const user = await findUser({ id: req.params.id });
     if (!user) return res.status(404).send("User not found");
 
     const visibleParamsOfUser = {
@@ -93,4 +93,28 @@ export const getUser = async (req: Request, res: Response) => {
     handleError(res, err, "Error while get user");
   }
 }
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  if (!req.body) return res.sendStatus(404);
+
+  try {
+    const users = await userRepository.find();
+    if (!users || users.length === 0) {
+      return res.status(404).send("Userы not found");
+    }
+
+    const visibleParamsOfUsers = users.map(user => (
+      {
+        name: user.fullName,
+        email: user.email,
+        dateOfBirth: user.Dob
+      }));
+
+    res.json(visibleParamsOfUsers);
+  }
+  catch (err) {
+    handleError(res, err, "Error while get user");
+  }
+}
+
 

@@ -6,7 +6,7 @@ export const validate = (schema) => async (req: Request, res: Response, next: Ne
       body: req.body,
       // query: req.query,
       // params: req.params,
-    });
+    }, { abortEarly: false });
     return next();
   } catch (err) {
     return res.status(500).json({ type: err.name, message: err.message });

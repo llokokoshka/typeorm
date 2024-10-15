@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { User } from "../entity/User";
+import { User } from "../db/entity/User";
 import { AppDataSource } from "../dataSourse";
 
 const crypto = require("crypto");
