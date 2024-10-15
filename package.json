@@ -1,30 +1,43 @@
 {
-   "name": "typeorm-sample",
-   "version": "0.0.1",
-   "description": "Awesome project developed with TypeORM.",
-   "type": "commonjs",
-   "devDependencies": {
-      "@types/node": "^16.11.10",
-      "ts-node": "10.9.1",
-      "typescript": "4.5.2"
-   },
-   "dependencies": {
-      "bcrypt": "^5.1.1",
-      "crypto": "^1.0.1",
-      "dotenv": "^16.4.5",
-      "express": "^4.21.0",
-      "hbs": "^4.2.0",
-      "jsonwebtoken": "^9.0.2",
-      "pg": "^8.4.0",
-      "reflect-metadata": "^0.1.13",
-      "typeorm": "0.3.20",
-      "yup": "^1.4.0"
-   },
-   "scripts": {
-      "start": "ts-node src/server.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
-   },
-   "main": "index.js",
-   "author": "",
-   "license": "ISC"
+  "name": "typeorm-sample",
+  "version": "0.0.1",
+  "description": "Awesome project developed with TypeORM.",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^16.11.10",
+    "ts-node": "10.9.1",
+    "typescript": "4.5.2"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "hbs": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "0.3.20",
+    "yup": "^1.4.0"
+  },
+  "scripts": {
+    "start": "ts-node src/server.ts",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "typeorm:cli": "ts-node node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm:cli -- migration:generate -d src/db/migrations -n",
+    "db:sync": "npm run typeorm:cli -- migration:generate -p src/db/migrations/sync --dataSource src/db/dataSource.ts",
+    "db:migrate:up": "npm run typeorm:cli -- migration:run --dataSource src/db/dataSource.ts",
+    "db:migrate:down": "npm run typeorm:cli -- migration:revert --dataSource src/db/dataSource.ts"
+  },
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llokokoshka/typeorm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/llokokoshka/typeorm/issues"
+  },
+  "homepage": "https://github.com/llokokoshka/typeorm#readme"
 }

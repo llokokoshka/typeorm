@@ -100,7 +100,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await userRepository.find();
     if (!users || users.length === 0) {
-      return res.status(404).send("Userы not found");
+      return res.status(404).send("Users not found");
     }
 
     const visibleParamsOfUsers = users.map(user => (
