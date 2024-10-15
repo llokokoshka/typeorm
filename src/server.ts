@@ -1,14 +1,11 @@
-import { AppDataSource } from "./index";
-const allRoutes = require('./routes/routes')
-const express = require("express");
+import { AppDataSource } from "./dataSourse";
+import allRoutes = require('./routes/routes');
+import express = require("express");
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static("public"));
-app.set("view engine", "hbs");
 app.use(allRoutes)
 
 AppDataSource.initialize()

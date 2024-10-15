@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { User } from "../entity/User";
-import { AppDataSource } from "../index";
+import { AppDataSource } from "../dataSourse";
 
 const crypto = require("crypto");
 const jwt = require('jsonwebtoken');

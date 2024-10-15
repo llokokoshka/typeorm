@@ -1,14 +1,9 @@
-import { registration, login, deleteUser, updateUser, getUser } from "../controllers/crudControllers";
-const { Router } = require('express')
+import authRoutes = require('./authRoutes');
+import userRoutes = require('./userRoutes');
+import { Router } from 'express';
 const router = Router();
-import authenticateToken from "../middleware/authToken";
-import { validate } from "../middleware/validate";
-import userSchema from "../schemas/userSchema";
 
-router.post("/registration", validate(userSchema), registration);
-router.post("/login", login);
-router.get("/user/:id", authenticateToken, getUser);
-router.put("/user/:id", validate(userSchema), authenticateToken, updateUser);
-router.delete("/user/:id", authenticateToken, deleteUser);
+router.use('/auth', authRoutes);
+router.use('/user', userRoutes);
 
 module.exports = router;

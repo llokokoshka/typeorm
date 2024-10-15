@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 import { NextFunction, Request, Response } from "express";
 import { User } from "../entity/User";
-import { AppDataSource } from "../index";
+import { AppDataSource } from "../dataSourse";
 const userRepository = AppDataSource.getRepository(User);
 
 async function authenticateToken(req: Request, res: Response, next: NextFunction) {
