@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { User } from "../db/entity/User";
 import { AppDataSource } from "../db/dataSource";
-import { generateAccessToken, handleError, validPassword, findUser, addUserInDb } from "./appControllers";
+import { generateAccessToken, validPassword } from "../utils/authUtils";
+import { handleError } from "../utils/errorUtils";
+import { findUser, addUserInDb } from "../utils/userUtils";
 const userRepository = AppDataSource.getRepository(User);
 import  * as dotenv from "dotenv"
 dotenv.config();
