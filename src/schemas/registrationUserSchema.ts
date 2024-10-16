@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const userSchema = yup.object({
+const registrationUserSchema = yup.object({
   body: yup.object({
     fullName: yup.string()
       .required('Введите ваше имя!'),
@@ -14,4 +14,4 @@ const userSchema = yup.object({
   }),
 });
 
-export default userSchema;
+export default registrationUserSchema;

@@ -3,8 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../db/entity/User";
 import { AppDataSource } from "../db/dataSource";
 import { handleError } from '../utils/errorUtils';
-// import  * as dotenv from "dotenv"
-// dotenv.config();
 const userRepository = AppDataSource.getRepository(User);
 
 async function authenticateToken(req: Request, res: Response, next: NextFunction): Promise<void> {
