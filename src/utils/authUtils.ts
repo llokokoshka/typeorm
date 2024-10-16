@@ -1,10 +1,9 @@
 import * as crypto from "crypto";
 import * as jwt from 'jsonwebtoken';
-import  * as dotenv from "dotenv"
+import * as dotenv from "dotenv"
 dotenv.config();
 
-
-export function generateAccessToken(id:Object) {
+export function generateAccessToken(id: Object) {
   return jwt.sign(id, process.env.TOKEN_SECRET, { expiresIn: '1h' });
 }
 

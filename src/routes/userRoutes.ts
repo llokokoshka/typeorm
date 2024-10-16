@@ -11,4 +11,4 @@ userRoutes.patch("/", validate(updateUserSchema), authenticateToken, updateUser)
 userRoutes.delete("/:id", authenticateToken, deleteUser);
 userRoutes.get("/", authenticateToken, getAllUsers);
 
-export default userRoutes ;
+export default userRoutes;

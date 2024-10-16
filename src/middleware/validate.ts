@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-export const validate = (schema) => async (req: Request, res: Response, next: NextFunction):Promise<void> => {
+export const validate = (schema) => async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     await schema.validate({
       body: req.body,

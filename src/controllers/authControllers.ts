@@ -9,7 +9,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 export const registration = async (req: Request, res: Response): Promise<void> => {
   if (!req.body) {
-    res.sendStatus(400); 
+    res.sendStatus(400);
     return;
   }
   try {
@@ -36,7 +36,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const user = await userRepository.findOneBy({ email: email });
-    if (!user){
+    if (!user) {
       res.status(404).send("User not found");
       return;
     }

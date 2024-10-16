@@ -7,25 +7,16 @@ import { findUser, addUserInDb } from "../utils/userUtils";
 const userRepository = AppDataSource.getRepository(User);
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-  if (!req.body) {
-    res.sendStatus(400); 
-    return;
-  }
-
   try {
     const userId = Number(req.params.id);
-    console.log(userId);
-    if (isNaN(userId)) {
-      res.status(400).send("Invalid user ID");
-      return;
-    }
     const user = await findUser(userId);
-    if (!user){
+    if (!user) {
       res.status(404).send("User not found");
       return;
     }
-  await userRepository.remove(user);
-  res.status(204).send(); 
+
+    await userRepository.remove(user);
+    res.status(204).send();
   }
   catch (err) {
     handleError(res, err, "Error while delete user");
@@ -34,21 +25,15 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   if (!req.body) {
-    res.sendStatus(400); 
+    res.sendStatus(400);
     return;
   }
   try {
-    const userId = Number(req.params.id);
-    if (isNaN(userId)) {
-      res.status(400).send("Invalid user ID");
-      return;
-    }
-    const user = await findUser(userId);
+    const user = req.user;
     if (!user) {
       res.status(404).send("User not found");
       return;
     }
-
     addUserInDb(user, req.body);
     await userRepository.save(user);
 
@@ -62,19 +47,12 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   if (!req.body) {
-    res.sendStatus(400); 
+    res.sendStatus(400);
     return;
   }
 
   try {
-    console.log(req.params.id);
     const userId = Number(req.params.id);
-    
-    if (isNaN(userId)) {
-      res.status(400).send("Invalid user ID");
-      return;
-    }
-
     const user = await findUser(userId);
     if (!user) {
       res.status(404).send("User not found");
@@ -95,14 +73,10 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
-  if (!req.body) {
-    res.sendStatus(400); 
-    return;
-  }
-
+export const getAllUsers = async (_, res: Response): Promise<void> => {
   try {
     const users = await userRepository.find();
+
     if (!users || users.length === 0) {
       res.status(404).send("Users not found");
       return;
