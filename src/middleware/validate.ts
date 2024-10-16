@@ -4,8 +4,6 @@ export const validate = (schema) => async (req: Request, res: Response, next: Ne
   try {
     await schema.validate({
       body: req.body,
-      // query: req.query,
-      // params: req.params,
     }, { abortEarly: false });
     next();
   } catch (err) {
