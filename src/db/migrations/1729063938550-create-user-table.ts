@@ -1,17 +1,18 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class createUserTable1630455645784 implements MigrationInterface {
-    name = 'createUserTable1630455645784';
+export class CreateUserTable1729063938550 implements MigrationInterface {
+    name = 'CreateUserTable1729063938550'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             CREATE TABLE "user" (
                 "id" SERIAL NOT NULL,
                 "fullName" character varying NOT NULL,
-                "email" character varying NOT NULL UNIQUE,
+                "email" character varying NOT NULL,
                 "password" character varying NOT NULL,
                 "Dob" TIMESTAMP NOT NULL,
-                CONSTRAINT "PK_a3c7f8a2ef0e1384de9f41ccf7a" PRIMARY KEY ("id")
+                CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"),
+                CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )
         `);
     }
@@ -21,4 +22,5 @@ export class createUserTable1630455645784 implements MigrationInterface {
             DROP TABLE "user"
         `);
     }
+
 }
